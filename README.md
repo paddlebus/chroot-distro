@@ -1,24 +1,20 @@
-# PRoot Distro
+# Chroot Distro
 
-A Bash script wrapper for utility [proot] for easy management of chroot-based
-Linux distribution installations. It does not require root or any special ROM,
-kernel, etc. Everything you need to get started is the latest version of
-[Termux] application. See [Installing](#installing) for details.
+A Bash script wrapper for [chroot] for easy management of chroot-based
+Linux distribution installations. Everything you need to get started is the latest version of
+the [Termux] application and root access (e.g. [Magisk], etc.) See [Installing](#installing) for details.
 
-PRoot Distro is not a virtual machine, neither a traditional chroot. It shares
+Chroot Distro is not a virtual machine. It shares
 the same kernel as your Android system, so do not even try to update it through
 package manager - this will not work.
 
-This script should never be run as root user. If you do so, file permissions
-and SELinux labels could get messed up. There also possibility of damaging
-system if being executed as root. For safety, PRoot Distro checks the user id
-before run and refuses to work if detected user id `0` (root).
+This script must be run as root. If run without root privileges, the program will refuse to work.
 
 ***
 
 ## Supported distributions
 
-PRoot Distro provides support only one version of distribution types, i.e. one
+Chroot Distro provides support only one version of distribution types, i.e. one
 of stable, LTS or rolling-release. Support of versioned distributions ended
 with branch 2.x. If you need a custom version, you will need to add it on your
 own. See [Adding distribution](#adding-distribution).
@@ -44,38 +40,38 @@ manually.
 
 With package manager:
 ```
-pkg install proot-distro
+pkg install Chroot-distro
 ```
 
 With git:
 ```
 pkg install git
-git clone https://github.com/termux/proot-distro
-cd proot-distro
+git clone https://github.com/termux/Chroot-distro
+cd Chroot-distro
 ./install.sh
 ```
 
 Dependencies: bash, bzip2, coreutils, curl, findutils, gzip, ncurses-utils,
-proot, sed, tar, xz-utils
+Chroot, sed, tar, xz-utils
 
 ## Functionality overview
 
-PRoot Distro aims to provide all-in-one functionality for managing the
+Chroot Distro aims to provide all-in-one functionality for managing the
 installed distributions: installation, de-installation, backup, restore, login.
 Each action is defined through command. Each command accepts its unique set
 of options, specific to the task that it performs.
 
 Usage basics:
 ```
-proot-distro <command> <arguments>
+chroot-distro <command> <arguments>
 ```
 
-Where `<command>` is a proot-distro action command (see below to learn what
+Where `<command>` is a Chroot-distro action command (see below to learn what
 is available) and `<arguments>` is a list of options specific to given command.
 
 Example of installing the distribution:
 ```
-proot-distro install debian
+chroot-distro install debian
 ```
 
 Known distributions are defined through plug-in scripts, which define URLs
@@ -84,15 +80,15 @@ for integrity check. Plug-ins also can define a set of commands which would
 be executed during distribution installation.
 
 See [Adding distribution](#adding-distribution) to learn more how to add own
-distribution to PRoot Distro.
+distribution to Chroot Distro.
 
 ### Accessing built-in help
 
 Command: `help`
 
-This command will show the help information about `proot-distro` usage.
-* `proot-distro help` - main page.
-* `proot-distro <command> --help` - view help for specific command.
+This command will show the help information about `Chroot-distro` usage.
+* `chroot-distro help` - main page.
+* `chroot-distro <command> --help` - view help for specific command.
 
 ### Backing up distribution
 
@@ -108,8 +104,8 @@ not compressed giving user freedom for further processing.
 
 Usage example:
 ```
-proot-distro backup debian | xz | ssh example.com 'cat > /backups/pd-debian-backup.tar.xz'
-proot-distro backup --output backup.tar.gz debian
+chroot-distro backup debian | xz | ssh example.com 'cat > /backups/pd-debian-backup.tar.xz'
+chroot-distro backup --output backup.tar.gz debian
 ```
 
 *This command is generic. All additional processing like encryption should be
@@ -124,7 +120,7 @@ plug-in of chosen distribution.
 
 Usage example:
 ```
-proot-distro install alpine
+chroot-distro install alpine
 ```
 
 By default the installed distribution will have same alias as specified on
@@ -134,12 +130,12 @@ option `--override-alias` which will create a copy of distribution plug-in.
 
 Usage example:
 ```
-proot-distro install --override-alias alpine-test alpine
-proot-distro login alpine-test
+chroot-distro install --override-alias alpine-test alpine
+chroot-distro login alpine-test
 ```
 
 Copied plug-in has following name format `<name>.override.sh` and is stored
-in directory with others (`$PREFIX/etc/proot-distro`).
+in directory with others (`$PREFIX/etc/Chroot-distro`).
 
 ### Listing distributions
 
@@ -154,21 +150,21 @@ Command: `login`
 
 Execute a shell within the given distribution. Example:
 ```
-proot-distro login debian
+chroot-distro login debian
 ```
 
 Execute a shell as specified user in the given distribution:
 ```
-proot-distro login --user admin debian
+chroot-distro login --user admin debian
 ```
 
 You can run a custom command as well:
 ```
-proot-distro login debian -- /usr/local/bin/mycommand --sample-option1
+chroot-distro login debian -- /usr/local/bin/mycommand --sample-option1
 ```
 
-Argument `--` acts as terminator of `proot-distro login` options processing.
-All arguments behind it would not be treated as options of PRoot Distro.
+Argument `--` acts as terminator of `Chroot-distro login` options processing.
+All arguments behind it would not be treated as options of Chroot Distro.
 
 Login command supports these behavior modifying options:
 * `--user <username>`
@@ -222,12 +218,12 @@ Login command supports these behavior modifying options:
 
 * `--no-link2symlink`
 
-  Disable PRoot link2symlink extension. This will disable hard link emulation.
+  Disable Chroot link2symlink extension. This will disable hard link emulation.
   You can use this option only if SELinux is disabled or is in permissive mode.
 
 * `--no-sysvipc`
 
-  Disable PRoot System V IPC emulation. Try this option if you experience
+  Disable Chroot System V IPC emulation. Try this option if you experience
   crashes.
 
 * `--no-kill-on-exit`
@@ -244,7 +240,7 @@ as it does not ask for confirmation. Deleted data is irrecoverably lost.
 
 Usage example:
 ```
-proot-distro remove debian
+chroot-distro remove debian
 ```
 
 ### Rename distribution
@@ -257,7 +253,7 @@ a copy of plug-in will be created.
 
 Usage example:
 ```
-proot-distro rename ubuntu ubuntu-test01
+chroot-distro rename ubuntu ubuntu-test01
 ```
 
 Only installed distribution can be renamed.
@@ -268,12 +264,12 @@ Command: `reset`
 
 Delete the specified distribution and install it again. This is a shortcut for
 ```
-proot-distro remove <dist> && proot-distro install <dist>
+chroot-distro remove <dist> && chroot-distro install <dist>
 ```
 
 Usage example:
 ```
-proot-distro reset debian
+chroot-distro reset debian
 ```
 
 Same as with command `remove`, deleted data is lost irrecoverably. Be careful.
@@ -282,18 +278,18 @@ Same as with command `remove`, deleted data is lost irrecoverably. Be careful.
 
 Command: `restore`
 
-Restore the distribution from the given proot-distro backup (tar archive).
+Restore the distribution from the given Chroot-distro backup (tar archive).
 
 Restore operation performs a complete rollback to the backup state as was in
 archive. Be careful as this command deletes previous data irrecoverably.
 
 Compression is determined automatically from file extension. Piped data
-must be always uncompressed before being supplied to `proot-distro`.
+must be always uncompressed before being supplied to `Chroot-distro`.
 
 Usage example:
 ```
-ssh example.com 'cat /backups/pd-debian-backup.tar.xz' | xz -d | proot-distro restore
-proot-distro restore ./pd-debian-backup.tar.xz
+ssh example.com 'cat /backups/pd-debian-backup.tar.xz' | xz -d | Chroot-distro restore
+Chroot-distro restore ./pd-debian-backup.tar.xz
 ```
 
 ### Clear downloads cache
@@ -308,11 +304,11 @@ Distribution is defined through the plug-in script that contains variables
 with metadata. A minimal one would look like this:
 ```.bash
 DISTRO_NAME="Debian"
-TARBALL_URL['aarch64']="https://github.com/termux/proot-distro/releases/download/v1.10.1/debian-aarch64-pd-v1.10.1.tar.xz"
+TARBALL_URL['aarch64']="https://github.com/termux/Chroot-distro/releases/download/v1.10.1/debian-aarch64-pd-v1.10.1.tar.xz"
 TARBALL_SHA256['aarch64']="f34802fbb300b4d088a638c638683fd2bfc1c03f4b40fa4cb7d2113231401a21"
 ```
 
-Script is stored in directory `$PREFIX/etc/proot-distro` and should be named
+Script is stored in directory `$PREFIX/etc/Chroot-distro` and should be named
 like `<alias>.sh`, where `<alias>` is a desired name for referencing the
 distribution. For example, Debian plug-in will typically be named `debian.sh`.
 
@@ -356,47 +352,17 @@ distribution. This is done through function `distro_setup`.
 Example:
 ```.bash
 distro_setup() {
-	run_proot_cmd apt update
-	run_proot_cmd apt upgrade -yq
+	run_chroot_cmd apt update
+	run_chroot_cmd apt upgrade -yq
 }
 ```
 
-`run_proot_cmd` is used when command should be executed inside the rootfs.
-
-## Differences from Chroot
-
-While PRoot is often referred as user space chroot implementation, it is much
-different from it both by implementation and features of work. Here is a list
-of most significant differences you should be aware of.
-
-1. PRoot is slow.
-
-   Every process is hooked through `ptrace()`, so PRoot can hijack the system
-   call arguments and return values. This is typically used to translate file
-   paths so traced program will see the different file system layout.
-
-2. PRoot cannot detach from the running process.
-
-   Since PRoot controls the running processes via `ptrace()` it cannot detach
-   from them. This means you can't start a daemon process (e.g. sshd) and close
-   PRoot session. You will have to either kill process, wait until it finish or
-   let proot kill it immediately on session close.
-
-3. PRoot does not elevate privileges.
-
-   Chroot also does not elevate privileges on its own. Just PRoot is configured
-   to hijack user id as well, i.e. make it appear as `root`. So in reality your
-   user name, id and privileges remain to be same as without PRoot but programs
-   that do sanity check for current user will assume you are running as
-   root user.
-
-   Particularly, the fake root user makes it possible to use package manager
-   in chroot environment.
+`run_chroot_cmd` is used when command should be executed inside the rootfs.
 
 ## Forking
 
-If you wish to use PRoot Distro or its part as a base for your own project,
+If you wish to use Chroot Distro or its part as a base for your own project,
 plase make sure you comply with GNU GPL v3.0 license.
 
 [Termux]: <https://termux.com>
-[proot]: <https://github.com/termux/proot>
+[Chroot]: <https://github.com/termux/Chroot>
