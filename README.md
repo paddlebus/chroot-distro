@@ -37,17 +37,10 @@ like shell completion or package install suggestions should be configured
 manually.
 
 ## Installing
-
-With package manager:
-```
-pkg install Chroot-distro
-```
-
-With git:
 ```
 pkg install git
-git clone https://github.com/termux/Chroot-distro
-cd Chroot-distro
+git clone https://github.com/paddlebus/chroot-distro
+cd chroot-distro
 ./install.sh
 ```
 
