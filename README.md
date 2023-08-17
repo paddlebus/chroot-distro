@@ -2,7 +2,7 @@
 
 A Bash script wrapper for [chroot] for easy management of chroot-based
 Linux distribution installations. Everything you need to get started is the latest version of
-the [Termux] application and [Magisk]. See [Installing](#installing) for details.
+the [Termux] application and Magisk. See [Installing](#installing) for details.
 
 Chroot Distro is not a virtual machine. It shares
 the same kernel as your Android system, so do not even try to update it through
